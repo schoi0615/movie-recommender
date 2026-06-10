@@ -12,22 +12,20 @@ private:
     double rating;
 
 public:
-    Movie() : id(0), title(""), releaseYear(0), rating(0.0) {}
-    Movie(int id, const std::string& title, int releaseYear, double rating)
-        : id(id), title(title), releaseYear(releaseYear), rating(rating) {}
+    // 생성자 선언
+    Movie();
+    Movie(int id, const std::string& title, int releaseYear, double rating);
 
-    int getId() const { return id; }
-    std::string getTitle() const { return title; }
-    int getReleaseYear() const { return releaseYear; }
-    double getRating() const { return rating; }
+    // Getter 선언
+    int getId() const;
+    std::string getTitle() const;
+    int getReleaseYear() const;
+    double getRating() const;
 
-    bool operator==(const Movie& other) const { return id == other.id; }
-    bool operator<(const Movie& other) const { return rating < other.rating; }
-
-    friend std::ostream& operator<<(std::ostream& os, const Movie& m) {
-        os << "[" << m.id << "] " << m.title << " (" << m.releaseYear << ") " << m.rating;
-        return os;
-    }
+    // 연산자 오버로딩 선언
+    bool operator==(const Movie& other) const;
+    bool operator<(const Movie& other) const;
+    friend std::ostream& operator<<(std::ostream& os, const Movie& m);
 };
 
 #endif

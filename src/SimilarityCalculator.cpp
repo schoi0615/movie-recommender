@@ -1,11 +1,13 @@
 #include "SimilarityCalculator.h"
-#include <cstdlib> // std::abs 사용
+#include <cstdlib> 
 
 int SimilarityCalculator::calculate(const std::vector<Rating>& user1, const std::vector<Rating>& user2) {
+    const int NO_SIMILARITY = -100;
+    const int WEIGHT_MULTIPLIER = 10;
+    
     int commonCount = 0;
     int scoreDiffSum = 0;
 
-   
     for (const Rating& r1 : user1) {
         for (const Rating& r2 : user2) {
             if (r1.getMovieId() == r2.getMovieId()) {
@@ -15,11 +17,9 @@ int SimilarityCalculator::calculate(const std::vector<Rating>& user1, const std:
         }
     }
 
-   
     if (commonCount == 0) {
-        return -100;
+        return NO_SIMILARITY; // 매직 넘버 제거
     }
 
-    
-    return (commonCount * 10) - scoreDiffSum;
+    return (commonCount * WEIGHT_MULTIPLIER) - scoreDiffSum; // 매직 넘버 제거
 }

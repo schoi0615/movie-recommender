@@ -3,6 +3,7 @@
 #include <sstream>
 #include <iostream>
 #include <algorithm>
+#include <stdexcept>
 
 void MovieManager::addMovie(const Movie& movie) {
     movies.push_back(movie);
@@ -33,11 +34,14 @@ void MovieManager::searchByTitle(const std::string& title) const {
     }
 }
 
+
+
 Movie MovieManager::findById(int id) const {
     for (const auto& m : movies) {
         if (m.getId() == id) return m;
     }
-    return Movie(-1, "Unknown", 0, 0.0);
+    // 가짜 객체 대신 명시적인 예외를 던진다.
+    throw std::invalid_argument("해당 ID의 영화를 찾을 수 없습니다.");
 }
 
 void MovieManager::loadFromFile(const std::string& filename) {
