@@ -3,24 +3,18 @@
 #include <sstream>
 #include <iostream>
 #include <set>
-#include <algorithm>
-#include <iterator>
-
 
 void RatingManager::addRating(const Rating& rating) {
     ratings.push_back(rating);
 }
 
-
 std::vector<Rating> RatingManager::findByUser(int userId) const {
     std::vector<Rating> userRatings;
-    
-    // 수동 반복문 대신 std::copy_if와 람다 함수 사용
-    std::copy_if(ratings.begin(), ratings.end(), std::back_inserter(userRatings),
-        [userId](const Rating& r) {
-            return r.getUserId() == userId;
-        });
-        
+    for (const auto& r : ratings) {
+        if (r.getUserId() == userId) {
+            userRatings.push_back(r);
+        }
+    }
     return userRatings;
 }
 

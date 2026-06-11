@@ -1,20 +1,23 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Isrc
+CXXFLAGS = -std=c++17 -Wall -Wextra -I src
+
+SRCS = src/main.cpp \
+       src/movie.cpp \
+       src/user.cpp \
+       src/rating.cpp \
+       src/MovieManager.cpp \
+       src/UserManager.cpp \
+       src/RatingManager.cpp \
+       src/Recommender.cpp \
+       src/SimilarityCalculator.cpp \
+       src/StressRecommender.cpp
 
 TARGET = movie_recommender
-SRCS = src/main.cpp src/MovieManager.cpp src/UserManager.cpp src/RatingManager.cpp src/Recommender.cpp src/SimilarityCalculator.cpp
-OBJS = $(SRCS:.cpp=.o)
 
-all: $(TARGET)
-
-$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
-
-src/%.o: src/%.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-run: $(TARGET)
-	./$(TARGET)
+$(TARGET): $(SRCS)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SRCS)
 
 clean:
-	rm -f src/*.o $(TARGET)
+	rm -f $(TARGET)
+
+.PHONY: clean

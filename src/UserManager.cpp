@@ -2,8 +2,16 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <stdexcept>
+#include <iostream>
 
 void UserManager::addUser(const User& user) {
+    for (const auto& u : users) {
+        if (u.getId() == user.getId()) {
+            throw std::invalid_argument(
+                "ID " + std::to_string(user.getId()) + "는 이미 존재합니다.");
+        }
+    }
     users.push_back(user);
 }
 
