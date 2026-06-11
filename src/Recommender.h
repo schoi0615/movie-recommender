@@ -3,20 +3,19 @@
 
 #include "MovieManager.h"
 #include "RatingManager.h"
-#include "movie.h"
-#include "rating.h"
 #include <vector>
+#include <utility> // pair를 위해 추가
 
 class Recommender {
 private:
     MovieManager& movieMgr;
     RatingManager& ratingMgr;
+    int calculateSimilarity(const std::vector<Rating>& ratingsA, const std::vector<Rating>& ratingsB);
 
 public:
     Recommender(MovieManager& mMgr, RatingManager& rMgr);
-
-    static int calculateSimilarity(const std::vector<Rating>& ratingsA, const std::vector<Rating>& ratingsB);
-    std::vector<Movie> recommend(int userId, int k, int n);
+    // 리턴 타입 수정
+    std::vector<std::pair<Movie, int>> recommend(int userId, int k, int n);
 };
 
 #endif

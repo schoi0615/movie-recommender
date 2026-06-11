@@ -8,7 +8,7 @@
 
 void printMenu() {
     std::cout << "\n╔══════════════════════════════════════╗" << std::endl;
-    std::cout << "║      영화 추천 프로그램  M4 Edition      ║" << std::endl;
+    std::cout << "║      영화 추천 프로그램  M4 Edition  ║" << std::endl;
     std::cout << "╚══════════════════════════════════════╝" << std::endl;
     std::cout << "\n  [영화 관리]" << std::endl;
     std::cout << "   1. 영화 추가" << std::endl;
@@ -87,7 +87,7 @@ int main() {
                         std::cout << "올바른 숫자를 입력해주세요: ";
                     }
 
-                    std::cout << "기본 평점 (0.0~10.0): ";
+                    std::cout << "기본 평점 (0.0~5.0): ";
                     while (!(std::cin >> rating)) {
                         std::cin.clear(); std::cin.ignore(MAX_BUFFER_SIZE, '\n');
                         std::cout << "올바른 숫자를 입력해주세요: ";
@@ -156,7 +156,8 @@ int main() {
 
                 // ─── 평점 관리 ──────────────────────────────────────────
                 case 7: {
-                    int uId, mId, score;
+                    int uId, mId;
+                    double score; 
 
                     std::cout << "유저 ID: ";
                     while (!(std::cin >> uId)) {
@@ -168,16 +169,23 @@ int main() {
                         std::cin.clear(); std::cin.ignore(MAX_BUFFER_SIZE, '\n');
                         std::cout << "올바른 숫자를 입력해주세요: ";
                     }
+                    
                     while (true) {
-                        std::cout << "평점 (1~5): ";
-                        if (std::cin >> score && score >= 1 && score <= 5) break;
-                        std::cin.clear(); std::cin.ignore(MAX_BUFFER_SIZE, '\n');
-                        std::cout << "1~5 사이 값을 입력해주세요." << std::endl;
+                        std::cout << "평점 (1.0~5.0): "; 
+                        // double로 입력받고 버퍼의 남은 찌꺼기를 전부 무시함
+                        if (std::cin >> score && score >= 1.0 && score <= 5.0) {
+                            std::cin.ignore(MAX_BUFFER_SIZE, '\n'); 
+                            break;
+                        }
+                        std::cin.clear();
+                        std::cin.ignore(MAX_BUFFER_SIZE, '\n');
+                        std::cout << "1.0~5.0 사이 값을 입력해주세요." << std::endl;
                     }
-                    ratingMgr.addRating(Rating(uId, mId, score));
+                    
                     std::cout << "평점이 등록되었습니다." << std::endl;
                     break;
                 }
+                
                 case 8: {
                     int mId;
                     std::cout << "영화 ID 입력: ";
@@ -193,34 +201,21 @@ int main() {
                 // ─── 추천 기능 ──────────────────────────────────────────
                 case 9: {
                     int uId, k, n;
+                    std::cout << "추천 대상 유저 ID: "; std::cin >> uId;
+                    std::cout << "참고할 이웃 수(K): "; std::cin >> k;
+                    std::cout << "추천받을 영화 수(N): "; std::cin >> n;
 
-                    std::cout << "추천 대상 유저 ID: ";
-                    while (!(std::cin >> uId)) {
-                        std::cin.clear(); std::cin.ignore(MAX_BUFFER_SIZE, '\n');
-                        std::cout << "올바른 숫자를 입력해주세요: ";
-                    }
-                    std::cout << "참고할 이웃 수(K): ";
-                    while (!(std::cin >> k)) {
-                        std::cin.clear(); std::cin.ignore(MAX_BUFFER_SIZE, '\n');
-                        std::cout << "올바른 숫자를 입력해주세요: ";
-                    }
-                    std::cout << "추천받을 영화 수(N): ";
-                    while (!(std::cin >> n)) {
-                        std::cin.clear(); std::cin.ignore(MAX_BUFFER_SIZE, '\n');
-                        std::cout << "올바른 숫자를 입력해주세요: ";
-                    }
-
-                    std::vector<Movie> recs = recommender.recommend(uId, k, n);
-                    if (recs.empty()) {
-                        std::cout << "추천할 만한 영화가 없습니다." << std::endl;
+                     auto recs = recommender.recommend(uId, k, n);
+                     if (recs.empty()) {
+                        std::cout << "추천할 영화가 없습니다." << std::endl;
                     } else {
                         std::cout << "\n--- 유저 " << uId << "번 맞춤 추천 TOP " << recs.size() << " ---" << std::endl;
-                        for (size_t i = 0; i < recs.size(); ++i) {
-                            std::cout << (i + 1) << "위: " << recs[i] << std::endl;
+                        for (const auto& item : recs) {
+                            std::cout << item.first.getTitle() << " [추천 점수: " << item.second << "점]" << std::endl;
                         }
                     }
-                    break;
-                }
+                break;
+}
 
                 // ─── M4 확장: 장르 필터 ─────────────────────────────────
                 case 10: {
